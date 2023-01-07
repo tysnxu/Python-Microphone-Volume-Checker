@@ -11,13 +11,15 @@ def title(title_text):
     os.system(f"title {title_text}")
 
 
-def display_information(sound_volume: int):
+def lerp(number_a: float, number_b: float, ratio: float):
+    return int(number_a * ratio + number_b * (1 - ratio))
+
+
+def display_information(new_volume: int):
     global loudest_volume, previous_volume
 
-    print()
-
-    if loudest_volume < sound_volume:
-        loudest_volume = sound_volume
+    if loudest_volume < new_volume:
+        loudest_volume = new_volume
 
         if loudest_volume > 50:
             title(f"MAX-{loudest_volume} - MIC WORKS")
@@ -25,13 +27,13 @@ def display_information(sound_volume: int):
             title(f"MAX-{loudest_volume}")
 
     # HAVE THE VOLUME DROP GRADUALLY
-    if sound_volume > previous_volume:
-        lerp_new_sound = sound_volume
+    if new_volume > previous_volume:
+        lerped_new_volume = new_volume
     else:
-        lerp_new_sound = int(previous_volume * 0.5 + sound_volume * 0.5)
+        lerped_new_volume = lerp(previous_volume, new_volume, 0.5)
 
-    print(f"{sound_volume} {'|' * lerp_new_sound}{' '*(max(total_line_spaces - lerp_new_sound, 0))}", end='\r')
-    previous_volume = sound_volume
+    print(f"{lerped_new_volume} {'|' * lerped_new_volume}{' ' * (max(total_line_spaces - lerped_new_volume, 0))}", end='\r')
+    previous_volume = new_volume
 
 
 def print_sound(indata, outdata, frames, time, status):
