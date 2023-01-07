@@ -15,16 +15,28 @@ def lerp(number_a: float, number_b: float, ratio: float):
     return int(number_a * ratio + number_b * (1 - ratio))
 
 
-def display_information(new_volume: int):
-    global loudest_volume, previous_volume
+def update_loudest_volume(new_volume: int):
+    global loudest_expire, loudest_volume
 
     if loudest_volume < new_volume:
         loudest_volume = new_volume
+        loudest_expire = 30
 
         if loudest_volume > 50:
             title(f"MAX-{loudest_volume} - MIC WORKS")
         else:
             title(f"MAX-{loudest_volume}")
+    else:
+        if loudest_expire != 0:
+            loudest_expire -= 1
+        else:
+            loudest_volume = new_volume
+
+
+def display_information(new_volume: int):
+    global previous_volume
+
+    update_loudest_volume(new_volume)
 
     # HAVE THE VOLUME DROP GRADUALLY
     if new_volume > previous_volume:
@@ -53,8 +65,8 @@ total_line_spaces = 100
 
 previous_volume = 0
 
-recent_loudest_volume = 0
 loudest_volume = 0
+loudest_expire = 0
 
 # SCRIPT STARTS
 set_window_size()
