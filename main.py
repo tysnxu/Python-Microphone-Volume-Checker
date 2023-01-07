@@ -4,7 +4,7 @@ import os
 
 
 def set_window_size():
-    os.system(f"mode con:cols={total_line_spaces + 5} lines=2")
+    os.system(f"mode con:cols={total_line_spaces + 20} lines=2")
 
 
 def title(title_text):
@@ -20,7 +20,7 @@ def update_loudest_volume(new_volume: int):
 
     if loudest_volume < new_volume:
         loudest_volume = new_volume
-        loudest_expire = 30
+        loudest_expire = 50
 
         if loudest_volume > 50:
             title(f"MAX-{loudest_volume} - MIC WORKS")
@@ -48,7 +48,7 @@ def format_printed_volume_bar(new_volume: int, max_volume: int):
         blank_spaces = max(total_line_spaces - max_volume - 1, 0)
         blank_area = ' ' * blank_spaces
 
-        blank_area = f"{gap_area}❚{blank_area}"
+        blank_area = f"{gap_area}*{blank_area}"
 
     return f"{string_start} {volume_area}{blank_area}"
 
@@ -62,7 +62,7 @@ def display_information(new_volume: int):
     if new_volume > previous_volume:
         lerped_new_volume = new_volume
     else:
-        lerped_new_volume = lerp(previous_volume, new_volume, 0.3)
+        lerped_new_volume = lerp(previous_volume, new_volume, 0.2)
 
     print(format_printed_volume_bar(lerped_new_volume, loudest_volume), end='\r')
     previous_volume = new_volume
